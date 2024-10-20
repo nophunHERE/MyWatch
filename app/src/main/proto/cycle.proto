@@ -1,0 +1,57 @@
+syntax = "proto3";
+package com.heytap.wearable.health;
+
+option java_package = "oplus.pb";
+option java_outer_classname = "Cycle";
+
+message CycleSet{ //周期设置
+     uint32 duration = 0x01;
+     uint32 interval = 0x02;
+     uint32 lasttime = 0x03;
+}
+
+message Symptom{//症状记录
+	 uint32 pain= 0x01; //无感觉 = 0x01、轻微不适 = 0x02、腹痛明显 = 0x04、腹痛难忍 = 0x08
+     uint32 volume = 0x02; //很少 = 0x01、少量 = 0x02、一般 = 0x04、大半 = 0x08、浸透 = 0x10
+	 uint32 color = 0x03; //粉红色 = 0x01、橘红色 = 0x02、鲜红色 = 0x04、暗红色 = 0x08、咖啡色 = 0x10
+	 uint32 shape = 0x04; //正常流动 = 0x01、粘稠 = 0x02、碎渣状 = 0x04、块状 = 0x08
+	 uint32 emotion = 0x05; //情绪多选，以位记录 -- 平静 = 0x01、放松 = 0x02、快乐 = 0x04、有活力 = 0x08、伤心 = 0x10、抑郁 = 0x20、焦虑 = 0x40、愤怒 = 0x80
+	 uint32 secret_shape = 0x06; //发干 = 0x01、粘稠 = 0x02、乳液状 = 0x04、蛋清状 = 0x08、水状 = 0x10
+	 uint32 secret_color = 0x07; //血色 = 0x01、偏黄色 = 0x02、偏绿色 = 0x04、灰白色 = 0x08
+}
+
+message SymptomSet{//症状设置
+	 uint32 time= 0x01; // 修改的时间戳
+	 uint32 type= 0x02; // 修改的症状类型：pain = 1，volume = 2， color = 3， shape = 4， emotion = 5， secret_shape = 6， secret_color = 7
+	 uint32 value= 0x03; // 症状值对于症状记录
+}
+
+message CycleSw{
+     uint32 sw 			= 0x01;// 1=start  2 end
+	 uint32 timestamp	= 0x02;
+}
+
+message Menses{
+     uint32 start_time = 0x01; //月经开始时间
+     uint32 end_time = 0x02; //月经结束时间，非周期结束时间
+}
+
+message CycleTracking{
+     uint32 start_time = 0x01; //周期开始时间
+     repeated Menses menses = 0x02;
+}
+
+message CycleData{//行经期记录
+	 repeated CycleTracking cycles = 0x01;
+}
+
+message CycleAll{//行经期记录
+	 CycleSet set = 0x01;
+	 Symptom symptom = 0x02;
+	 CycleData cycle = 0x03;
+}
+
+message Remind{
+     uint32 type = 0x01; //提醒类型 1提前一天提醒，2结束提醒，3提前一周提醒，4延期提醒，5当天提醒
+     uint32 value = 0x02; //时间
+}

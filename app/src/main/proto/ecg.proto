@@ -1,0 +1,41 @@
+syntax = "proto3";
+package com.heytap.wearable.health;
+
+option java_package = "oplus.pb";
+option java_outer_classname = "Ecg";
+
+message EcgRequest {
+  uint32 startTime = 1;
+  uint32 endTime = 2;
+  repeated string ecgIds = 3;
+  uint32 hasMore = 4;
+}
+
+message EcgData  {
+  string ecgIds = 1;
+}
+
+message EcgSetting {
+  uint32 mode = 1;
+}
+
+message EcgMeasureTypeSetRequest {
+  uint32 measureType = 1;
+  uint32 capSensorType = 2;
+  uint32 maximum_value = 3;
+  uint32 lowest_value = 4;
+}
+
+message EcgMeasureTypeSetResponse {
+  uint32 result = 1;
+}
+
+message EcgLeadOnStatus {
+  uint32 status = 1; //0:LEADON_FAIL 1:LEADON_OK
+  sfixed64 ts = 2;//时间戳
+}
+
+message EcgActivatingState {
+  uint32 type = 1; // 1:获取状态 2:改变状态
+  uint32 value = 2; // 0关闭 1开启
+}

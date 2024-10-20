@@ -1,0 +1,120 @@
+syntax = "proto3";
+package com.heytap.wearable.health;
+
+option java_package = "oplus.pb";
+option java_outer_classname = "HeartRate";
+
+message HeartRateRequest {
+    uint32 switch = 1;
+    uint32 interval = 2;
+}
+
+message HrWarnDetailRequest {
+    uint32 offset = 1;
+}
+
+message HrStatisticDetailRequest {
+    uint32 offset = 1;
+}
+
+message MobileHrStatisticRequest {
+    uint32 start_time = 1; // 开始日期时间戳(为当天0时0分0秒对应时间戳)
+    uint32 end_time = 2; // 结束日期时间戳(为当天0时0分0秒对应时间戳)
+}
+
+message MobileStatisticsHeartRateData {
+    repeated MobileStatisticsHeartRate data = 1; // 统计心率列表
+}
+
+message MobileStatisticsHeartRate {
+    uint32 timestamp = 1; // 当前数据对应日期（0时0分0秒）的时间戳
+    uint32 avgWalkHeartRate = 2; // 平局步行心率
+    uint32 restHeartRate = 3; // 静息心率
+    uint32 sleepHeartRate = 4; // 睡眠基准心率
+}
+
+message HrDetail {
+    uint32 index = 1;
+    uint32 startTime = 2;
+    repeated HR hr = 3;
+}
+
+message HR {
+    uint32 offset = 1;
+    uint32 value = 2;
+    uint32 reliability = 3;
+}
+
+// [Phone] 日常心率帧详情数据
+message HrDailyResponse {
+    uint32 index = 1; // 数据包索引
+    uint32 startTime = 2; // 数据包起始时间
+    repeated HrDailyDetail hr = 3; // 日常心率详情数据
+    uint32 interval = 4; // 心率数据间隔，单位秒
+}
+
+message HrDailyDetail {
+    uint32 offset = 1; // 时间偏移 startTime + offset * interval可以获得该心率的时间戳
+    uint32 value = 2; // 心率值
+    uint32 reliability = 3; // 可信度
+    uint32 type = 4; // 心率类型，0：日常心率，1：静息心率，2：运动心率
+}
+
+message HeartRateContent {
+    int32 alarmType = 1; // 心率告警类型，1:心率过低 2:心率过高
+    int32 heartRateType = 2; // 心率类型，1:日常心率  2:运动心率
+    int32 minValue = 3;
+    int32 maxValue = 4;
+    int32 startTime = 5;
+    int32 endTime = 6;
+    int32 lowestThreshold = 7;
+    int32 highestThreshold = 8;
+}
+
+message HrRecordPackage {
+    uint32 index = 1;
+    repeated HeartRateContent data = 2;
+}
+
+message HrStatistics {
+    uint32 value = 1;
+    uint32 timeStamp = 2;
+}
+
+message Chart {
+    uint32 hrMin = 1;
+    uint32 hrMax = 2;
+}
+
+message HrRange {
+    HrStatistics hrMin = 1;
+    HrStatistics hrMax = 2;
+    uint32 timestamp = 3;
+}
+
+message HrStatisticsDetail {
+    uint32 offset = 1;
+    HrStatistics lastRate = 2;
+    HrStatistics rangeMin = 3;
+    HrStatistics rangeMax = 4;
+    HrStatistics walk = 5;
+    HrStatistics quiet = 6;
+    HrStatistics sleep = 7;
+    repeated Chart data = 8;
+    HrRange sleepHrRange = 9;
+    HrStatistics complication = 10;
+}
+
+message HrWarnItem {
+    uint32 startTime = 1; // 开始时间戳
+    uint32 endTime = 2; // 结束时间戳
+    uint32 warnType = 3; // 心率预警类型，1：低心率预警 2：高心率预警
+    uint32 hrType = 4; // 心率类型， 1：日常心率 2：运动心率
+    uint32 hrMin = 5; // 最低心率
+    uint32 hrMax = 6; // 最高心率
+}
+
+message HrWarnDetail {
+    uint32 offset = 1;
+    repeated HrWarnItem item = 2;
+}

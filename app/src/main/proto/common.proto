@@ -1,0 +1,38 @@
+syntax = "proto3";
+package Common;
+option java_package = "oplus.pb";
+
+message ErrorCode {
+    uint32 code = 1;
+    string extraData = 2;
+}
+
+message AppIntent {
+    string packageName = 1;
+    string action = 2;
+    string params = 3;
+    string clsName = 4;
+}
+
+message PacketRequest {
+    uint32 startTime = 1;
+    uint32 endTime = 2;
+}
+
+message PacketResponse {
+    uint32 packageTotal = 1;
+    uint32 startTime = 2;
+    uint32 maxDay = 3;
+}
+
+message PacketDataRequest {
+    uint32 index = 1;
+    uint32 startTime = 2;
+}
+
+message DataChangedNotify {
+    uint32 dataType = 1;
+    uint32 dataChangedTime = 2;
+    string extra = 3;
+}
+

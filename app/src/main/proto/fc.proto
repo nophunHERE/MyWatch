@@ -1,0 +1,27 @@
+syntax = "proto3";
+package com.heytap.wearable.health;
+
+option java_package = "oplus.pb";
+// 响应数据结构
+message FcDetailData {
+    uint32 index = 1;
+    uint32 start_time = 2; // 第一条数据的开始时间，时间戳（单位秒）
+    repeated FcItem data_list = 3; // 房颤数据列表
+}
+
+message FcItem {
+    uint32 offset = 1; // 相对于开始时间偏移量（单位：分钟）
+    uint32 state = 2; // 是否房颤  0 非房颤  1房颤
+    uint32 reliability = 3; // 可信度
+    uint32 type = 4; //是否告警 0 正常，1 告警
+}
+
+message FcWarn {
+    uint32 timestamp = 1;
+    uint32 state = 2; // 是否房颤  0 非房颤  1房颤
+    uint32 reliability = 3;
+}
+
+message FcTimestamp{
+    uint32 timestamp = 1;
+}

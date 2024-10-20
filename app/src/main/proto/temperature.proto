@@ -1,0 +1,57 @@
+syntax = "proto3";
+package com.heytap.wearable.health;
+
+option java_package = "oplus.pb";
+option java_outer_classname = "Temperature";
+
+// [OAF-MCU]腕温详情数据同步协议
+message TemperaturePacket {
+  uint32 index = 1; // 数据包索引
+  uint32 start_time = 2; // 数据包第一条数据的时间戳
+  repeated TemperatureRecord records = 3;
+}
+
+// [OAF-MCU]腕温详情数据同步协议
+message TemperatureRecord {
+  uint32 min_offset = 1; // 每条数据时间戳相比第一条数据时间戳的分钟偏移量（单位分钟）
+  uint32 value = 2; // 腕温，bit0-1：status，bit2：confidence，bit3-bit15 腕温值*100
+  uint32 baseline_minute = 3; // 分钟级基线
+}
+
+// [OAF-MCU]腕温统计数据同步协议
+message TemperatureStatsPacket {
+  uint32 index = 1;
+  repeated TemperatureStatsRecord records = 2; // 腕温统计数据详情
+}
+
+// [OAF-MCU]腕温统计数据同步协议
+message TemperatureStatsRecord {
+  uint32 time_stamp = 1; // 数据基准时间戳；睡眠数据所在天的零点（参考睡眠）
+  uint32 typical_value = 2; //典型值，温度乘以100，向下取整
+  uint32 confidence = 3; // 典型值置信度 0：不可信 1：可信
+  uint32 baseline_day = 4; //日级腕温基线，温度乘以100，向下取整
+  uint32 symptoms = 5; // 腕温症状，bit0：我很好 bit1：发烧 bit2：感冒 bit3：疲劳 bit4：寒冷 bit5：体热
+  uint32 behaviors = 6; // 行为，bit0：喝酒 bit1：运动 bit2：熬夜
+}
+
+// [MCU]腕温当天统计数据
+message McuTemperatureStatsRecord {
+  uint32 remaining_days = 1; // 剩余天数（0-5）
+  uint32 state = 2; // 0：正常，异常状态：1：不足180分钟， 2：算法置信度小于20%，3：重新开始基线计算周期
+  uint32 yAxisRange = 3; // 腕温曲线y轴在最大相对腕温，温度乘以100，向下取整
+  uint32 timestamp = 4; // 今日典型值对应的时间戳
+  repeated int32 temperatures = 5; // 过去7天的腕温数据，相对典型值，温度乘以100，向下取整。INT.MIN代表无效；数组长度固定为7, 0代表今天，1代表昨天...
+}
+
+message TemperatureSettings {
+  uint32 enable = 1; // 开关状态 0：关，1：开
+}
+
+/**
+【家人健康】
+1. 距离基线产生的时间
+2. 手腕温度睡眠区间
+3. 腕温典型值
+4. 症状
+5. 行为
+ */

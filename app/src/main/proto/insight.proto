@@ -1,0 +1,66 @@
+syntax = "proto3";
+package com.heytap.wearable.health.proto.insight;
+
+option java_package = "oplus.pb";
+option java_outer_classname = "Insight";
+
+// [OAF] 智眼数据协议
+message InsightData {
+  string code = 1; // 智眼数据的唯一标识，参考云端协议https://doc.myoas.com/pages/viewpage.action?pageId=680898928
+  uint32 timestamp = 2; // 下发通知的时间
+  uint32 category = 3; // 智眼模块，0：体征异常，1：交叉分析，2：单维度
+  string title = 4; // 通知标题
+  string content = 5; // 通知内容
+  bool showNotification = 6;// 是否弹通知
+  string extra = 7; // 扩展字段
+  oneof payload {
+    OsaAnalysis osaAnalysis = 8;
+    ScoreAnalysis scoreAnalysis = 9;
+    MultiDimensionalAnalysis multiAnalysis = 10;
+  }
+}
+
+message OsaAnalysis {
+  uint32 timestamp = 1; // 鼾症风险综合评估时间戳（应该等于最近一天的osa对应的时间戳），--对应昨天
+  uint32 totalOsaResult = 2; // 鼾症风险综合评估结果,
+  repeated OsaResult details = 3; // 每天的鼾症风险评估结果,只下发有结果的天数
+}
+
+message OsaResult {
+  uint32 timestamp = 1; // 鼾症风险评估时间戳
+  int32 level = 2; // 鼾症风险评估结果
+}
+
+// [OAF] 智眼单维睡眠评分分析
+message ScoreAnalysis {
+  uint32 timestamp = 1; // 鼾症风险综合评估时间戳（应该等于最近一天的osa对应的时间戳），--对应昨天
+  uint32 lastAvgScore = 2; // 上一个周期评分的平均值
+  uint32 curAvgScore = 3; // 当前周期评分的平均值
+  repeated ScoreResult details = 4; // 两周的睡眠评分详情数据,统一有数据才给
+}
+
+message ScoreResult {
+  uint32 timestamp = 1; // 睡眠评分时间戳
+  uint32 score = 2; // 睡眠评分
+}
+
+// [OAF] 智眼多重体征分析协议
+message MultiDimensionalAnalysis {
+  uint32 timestamp = 1; // 多重体征分析时间戳--对应更新时间戳
+  uint32 type = 2; // 多重体征异常类型：1-发烧流感， 2-熬夜疲劳， 3-运动过量，10-入睡时间点，11-步数，12-运动
+  uint32 status = 3; // subType
+  repeated SingleDetails details = 4; // 单维体征详情数据
+}
+
+// 腕温确定有没有负值，保留多少位
+message SingleDetails {//
+  uint32 type = 1; // 参考DataType中的定义
+  string legend = 2; // 图例名称
+  repeated uint32 timestamps = 3; // 体征数据时间戳
+  repeated uint32 values = 4; //  体征数据数组
+  repeated uint32 baselines = 5; // 体征数据基线数组
+  repeated uint32 safeUpperLimits = 6; // 该项数据的安全区上限
+  repeated uint32 safeLowerLimits = 7; // 该项数据的安全区下限
+  uint32 totalDays = 8; // 产生基线总共需要的天数，无为0
+  uint32 currentDays = 9; // 已产生数据的天数，无为0
+}

@@ -1,0 +1,16 @@
+syntax = "proto3";
+package com.heytap.wearable.health;
+
+option java_package = "oplus.pb";
+option java_outer_classname = "Breath";
+
+message SleepBreathDetails {
+    uint32 index = 1; // 数据包索引
+    uint32 start_time = 2; // 数据包第一条数据的时间戳
+    repeated SleepBreath breaths = 3;
+}
+
+message SleepBreath {
+    uint32 min_offset = 1; // 每条数据时间戳相比第一条数据时间戳的分钟偏移量（单位分钟）
+    uint32 breath = 2; // 呼吸率 0-1bit表示置信度，其他表示呼吸率
+}

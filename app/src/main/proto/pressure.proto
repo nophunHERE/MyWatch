@@ -1,0 +1,58 @@
+syntax = "proto3";
+package com.heytap.wearable.health;
+
+option java_package = "oplus.pb";
+option java_outer_classname = "Pressure";
+
+message Stress
+{
+  uint32 timestamp = 1;
+  uint32 value = 2;
+}
+
+message StressStatsData
+{
+  uint32 timestamp = 1; // 当前时间戳
+  uint32 avgValue = 2; // 压力平均值
+  uint32 minValue = 3; // 范围低值
+  uint32 maxValue = 4; // 范围高值
+  uint32 highDuration = 5; // 高压持续时间
+  float balanceValue = 6; // 压力均衡状态
+  Stress latestValue = 7; // 上一次测量数据
+  repeated uint32 values = 8; //图表数据
+}
+
+message PressureWarnHigh {
+  uint32 timestamp = 1;
+  uint32 highPressure = 2;
+}
+
+message PressureDetailPack {
+  uint32 index = 1;
+  uint32 startTime = 2;
+  repeated PressureDetail data = 3;
+}
+
+message PressureDetail {
+  //相对于startTime的分钟偏移量，可以根据start_time + time_offset*60来获取当前这分钟数据对应的时间戳
+  uint32 timeOffset = 1;
+  uint32 stress = 2;
+  uint32 reliability = 3;  //可信度
+  uint32 type = 4;   //压力测量类型
+  uint32 sdnn = 5;//每拍心跳的标准差，与心脏总体变异性相关
+  uint32 rmssd = 6;//每拍心跳差值均方根，与心脏变异性中的高频成分相关
+}
+
+message PressureWarnSw {
+  uint32 switch = 1;
+}
+
+message PressureSw {
+  uint32 switch = 1;
+  uint32 detectionType = 2;
+}
+
+message PressureRequest {
+  uint32 sw = 1;
+  uint32 interval = 2;
+}

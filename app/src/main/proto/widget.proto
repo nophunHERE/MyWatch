@@ -1,0 +1,29 @@
+syntax = "proto3";
+package com.heytap.wearable.health;
+
+option java_package = "oplus.pb";
+option java_outer_classname = "Widget";
+
+message WidgetHR{
+    uint32 lastHeartRate = 1;
+    uint32 timeStamp = 2;
+}
+
+message WidgetPressure{
+    uint32 timeStamp = 1;
+    uint32 lastStress = 2;
+}
+
+message WidgetDaily{
+    uint32 timeStamp = 1;
+    uint32 steps = 2;
+    uint32 calories = 3;
+    uint32 exercise = 4;
+    uint32 activeTimes = 5;
+}
+
+message WidgetData{
+    WidgetHR lastHeartRate = 1;
+    WidgetPressure widgetPressure = 2;
+    WidgetDaily widgetDaily = 3;
+}

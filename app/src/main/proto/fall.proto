@@ -1,0 +1,63 @@
+syntax = "proto3";
+package com.heytap.wearable.health;
+
+option java_package = "oplus.pb";
+option java_outer_classname = "Fall";
+
+message PackageTotal {
+    uint32 id = 1;
+    uint32 packTotal = 2;
+    uint32 fallType = 3;
+}
+
+message PackageRsp {
+    uint32 id = 1;
+}
+
+message PackageData {
+    uint32 id = 1;
+    uint32 index = 2;
+    bytes data = 3;
+}
+
+message DetectionData {
+    uint32 status = 1;
+    uint32 size = 2;
+    bytes data = 3;
+    uint32 timestamp = 4;
+    uint32 fallType = 5;
+}
+
+message FallRecord {
+    int32 timestamp = 1;
+    int32 state = 2; // 是否跌倒  0 非跌倒  1跌倒
+}
+
+message DataPack {
+    uint32 index = 1;
+    uint32 startTime = 2;
+    repeated FallRecord data = 3;
+}
+
+enum ACTION_INTENT {
+    NORMAL = 0;
+    TURN_WRIST = 1;//转动手腕
+    FALL_TEST = 3;//通知小核开启跌倒模拟
+    TURN_WRIST_TEST = 4;//通知小核开启转腕模拟
+}
+
+message NormalRequest {
+    ACTION_INTENT cmd = 1;//意图
+    oneof payload {
+        TurnWristParam turnWristParam = 2;//请求转动手腕
+    }
+}
+
+message TurnWristParam {
+   uint32 state = 1;// 1 开启监听转腕 2 关闭
+   uint32 timeOut = 2;//自动关闭转腕算法的时长
+}
+
+message TurnWristRepo {
+    uint32 state = 1;//1开启 2关闭 3转腕
+}

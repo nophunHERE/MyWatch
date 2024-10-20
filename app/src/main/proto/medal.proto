@@ -1,0 +1,50 @@
+syntax = "proto3";
+package com.heytap.wearable.health;
+
+option java_package = "oplus.pb";
+option java_outer_classname = "Medal";
+
+message MedalRequest {
+  string codeType = 1; //传入哪类勋章，不传的话返回手表需要的所有勋章
+}
+
+message MedalProto {
+  string codeType = 1; //传入哪类勋章，不传的话返回手表需要的所有勋章
+  repeated MedalBean medalList = 2; //勋章json结构
+}
+
+message MedalBean {
+  string code = 1; // 勋章编码,格式：cme_all_calorie_5000 目标值
+  string typeCode = 2; //小类(cme_all_calorie)
+  string target = 3; // 目标值(5000)
+  uint32 logicStatus = 4; // 0:正常，1：逻辑下线
+  string name = 5; //勋章名称
+  string medalResUrl = 6; //勋章动效
+  uint32 obtainStatus = 7; //获取状态。0：未获取，1：已获取
+  uint32 obtainTime = 8; //勋章获取时间
+  string remark = 9; //自己用
+  uint32 breakRecordTimes = 10; //0没打破记录 1 打破记录过
+  uint32 recordDuration = 11; //运动时长
+  uint32 display = 12; //是否显示。0：显示，1：不显示
+  string imageGet = 13;// 已获得图片地址
+  string imageUnget = 14; // 未获得图片地址
+  uint32 sort = 15;
+  uint32 colorType = 16;// 勋章颜色： 1金色 2玫瑰金 3银色 4年度勋章2023
+  string unattainedContent = 17;// 获取条件文案
+}
+
+// 勋章新数据协议，通手机请求云端接口
+message MedalCouldData{
+  repeated MedalAllList medalAllList = 1;
+}
+
+message MedalAllList{
+  repeated MedalBean medalList = 1;
+  uint32 medalSort = 2;
+  string medalNameEn = 3;
+  string medalNameZn = 4;
+}
+
+message MedalResource {
+  repeated string url = 1;
+}

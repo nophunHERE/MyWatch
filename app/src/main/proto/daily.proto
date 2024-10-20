@@ -1,0 +1,125 @@
+syntax = "proto3";
+package com.heytap.wearable.health;
+
+option java_package = "oplus.pb";
+option java_outer_classname = "Daily";
+
+message HealthTotalRequest {
+  uint32 type = 1;
+}
+
+// [MCU-OAF] 双核每日活动数据同步协议、蓝牙联动协议5.5.21
+message HealthTotalResponse {
+  uint32 totalCalorie = 1;
+  uint32 totalStep = 2;
+  uint32 totalDistance = 3;
+  uint32 totalFloor = 4;
+  uint32 totalExercise = 5;
+  uint32 timestamp = 6;
+  uint32 totalActivity = 7;
+  uint32 totalStaticCalorie = 8;
+  uint32 sedentaryCount = 9;
+  uint32 sedentaryTime = 10;
+  uint32 exerciseSportMinutes = 11; //运动分钟 | 快走分钟 = total_exercise - sport_minutes
+  uint32 activityActivePercent = 12; //活动占比
+  uint32 activityStillPercent = 13; // 静止占比
+  uint32 achievementRecord = 14; //一周达标记录
+}
+
+// [MCU] 双核每日活动数据同步协议
+message HealthDataTotal {
+  uint32 index = 1;
+  uint32 startTime = 2;
+  repeated HealthData data = 3;
+}
+
+// TODO 为什么没有活动次数？
+message HealthData {
+  uint32 offset = 1;
+  uint32 minuteCalorie = 2;
+  uint32 minuteDistance = 3;
+  uint32 minuteHeight = 4;
+  uint32 sportType = 5;
+  uint32 minuteExercise = 6;
+  uint32 minuteStep = 7;
+}
+
+message StandReminder {
+  uint32 sedTime = 1;
+}
+
+message ActivityCountData {
+  uint32 timestamp = 1;
+  uint32 totalTime = 2;
+  repeated uint32 detail = 3;
+}
+
+message HealthTotalData {
+  uint32 step = 1;
+  uint32 cal = 2;
+  uint32 exercise = 3;
+  uint32 activeTimes = 4;
+}
+
+message DailyWeekExtra{
+  uint32 exercise_sport_minutes = 1;  // 运动分钟
+  uint32 activity_active_percent = 2; // 活动占比
+  uint32 longest_sedentary = 3; // 最长久坐
+  uint32 distance = 4;// 活动距离
+}
+
+message WeekReport {
+  uint32 monTimestamp = 1;
+  repeated HealthTotalData data = 2;
+  repeated DailyWeekExtra extraData = 3; // 每天的额外计算信息，数组长度8。用目前只用最后一组数据
+  uint32 achievement_record = 4; // 一周达标记录
+}
+
+message GoalCompleteData {
+  uint32 type = 1;
+  uint32 stepIsComplete = 2;
+  uint32 calorieIsComplete = 3;
+  uint32 exerciseIsComplete = 4;
+  uint32 activeTimesIsComplete = 5;
+  uint32 steps = 6;
+  uint32 calories = 7;
+  uint32 exercise = 8;
+  uint32 activeTimes = 9;
+  uint32 type_param = 10;
+  uint32 extra_info = 11;// 达标时额外信息，例：快走时长
+}
+
+message SedentaryState{
+  uint32 timeCount = 1;
+  uint32 state = 2;
+}
+
+message DailyTargetUpgrade{
+  uint32 steps_aim = 1;
+  uint32 calories_aim = 2;
+  uint32 exercise_aim = 3;
+  uint32 active_aim = 4;
+}
+
+message DailyUpgradeState{
+  uint32 aim_type = 1; // 参考枚举  0：升级 1：取消升级
+  uint32 result = 2; // 参考枚举 0 -> 3 ：步数 -> 活动次数
+}
+
+// 同步统计历史数据
+message HistoryData{
+  uint32 total_calorie = 1;
+  uint32 total_step = 2;
+  uint32 total_distance = 3;
+  uint32 total_floor = 4;
+  uint32 total_exercise = 5;
+  uint32 timestamp = 6;
+  uint32 total_activity_count = 7;
+  uint32 static_cal = 8;
+  uint32 sedentary_count = 9;
+  uint32 sedentary_time = 10;
+}
+
+message DailyTotalHistory{
+  repeated HistoryData historyList = 1;
+}

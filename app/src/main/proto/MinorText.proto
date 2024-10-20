@@ -1,0 +1,18 @@
+syntax = "proto3";
+package com.heytap.wearable.health;
+
+option java_package = "oplus.pb";
+option java_outer_classname = "MinorText";
+
+message ScienceInfo{
+  repeated ScienceInfoItem scienceInfoList = 1;
+}
+message ScienceInfoItem{
+  uint32 infoType = 1;// 信息类别 1：步数 2：消耗 3：锻炼 4:活动
+  repeated ScienceInfoDetail infoDetailList = 2;
+}
+message ScienceInfoDetail{
+  uint32 serialNo = 1; // 序号
+  string content = 2; // 消息内容
+  uint32 modifiedTimestamp = 3; // 时间戳（秒）
+}
